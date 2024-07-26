@@ -1,0 +1,249 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+
+class Book {
+public:
+	long long ID;
+	string title;
+	string auther;
+	bool available = 1;
+
+	void set_item();
+
+	void get_item();
+
+	void update_book();
+
+	void borrow();
+
+	void return_book();
+
+
+
+};
+
+
+void Book::set_item() {
+	cout<< "ENTER ID: ";
+	cin>>ID;
+	cout<<"ENTER title: ";
+	cin>>title;
+	cout<<"ENTER auther: ";
+	cin>>auther;
+
+
+}
+
+void Book::get_item() {
+	cout<<"------------------------------"<< "\n";
+	cout<< "ID: "<< ID<< "\n";
+	cout<< "title: "<< title<<"\n";
+	cout<< "auther: "<< auther<<"\n" ;
+	cout<<  "is available: "<< available << "\n";
+	cout<<"------------------------------\n";
+}
+
+void Book::update_book() {
+
+    int option = 0;
+    cout<< "&&&&&&&&&&&&&&&&&&&&&\n";
+    cout<< "choose Option: \n";
+    cout<< "1- update title \n";
+    cout<< "2- update auther \n";
+    cout<< "&&&&&&&&&&&&&&&&&&&&&\n";
+    cout<< "ENTER Option: ";
+    cin>> option;
+    if(option == 1){
+        string tmp="";
+        cout<< "ENTER title: ";
+        cin>> tmp;
+        title = tmp;
+    }
+    else if(option == 2){
+        string tmp="";
+        cout<< "ETNER  auther: ";
+        cin>> tmp;
+        auther = tmp;
+    }
+    cout<<"------------------------------\n";
+
+}
+
+void Book::borrow(){
+    if(available == 1){
+        cout<< "\n book is available \n";
+        available = 0;
+    }
+    else{
+        cout<< "\nbook not available\n";
+    }
+}
+
+void Book::return_book(){
+    if(available == 0){
+        cout<< "\n book returned now \n";
+        available = 1;
+    }
+    else{
+        cout<< "\nbook is already available\n";
+    }
+}
+
+
+
+
+
+
+
+int manage_lib() {
+	int option=0;
+	cout<< "|-----------------|"<< "\n";
+	cout<< "|Choose Option:   |"<< "\n";
+	cout<< "|1- add book      |"<< "\n";
+	cout<< "|2- update book   |"<< "\n";
+	cout<< "|3- show books    |"<< "\n";
+	cout<< "|4- remove book   |" <<"\n";
+	cout<< "|5- borrow book   |" <<"\n";
+	cout<< "|6- return book   |" <<"\n";
+	cout<< "|0- quit          |"<< "\n";
+	cout<< "|-----------------|"<< "\n";
+	cout<< "ENTER Option: ";
+	cin>>option;
+	return option;
+}
+
+
+
+Book* search_for_book(Book *books, int size, long long id) {
+
+	for(int i=0; i< size; i++) {
+		cout<< books[i].ID;
+		if(books[i].ID == id) {
+			return &books[i];
+		}
+	}
+	cout<< "id not appear in books ids \n";
+	return nullptr;
+}
+
+
+
+Book* delete_book(Book* books, int size, long long id) {
+    Book* new_books = new Book[size+1];
+    int last_place = 0;
+
+    for (int i = 0; i < size; i++) {
+        if (books[i].ID == id) {
+            continue;
+        } else {
+            new_books[last_place] = books[i];
+            last_place++;
+        }
+    }
+    return new_books;
+}
+
+
+
+
+
+
+int main() {
+
+	Book *books= new Book[5];
+
+
+    books[0].ID= 1;
+    books[0].title = "book1";
+    books[0].auther = "ahmed1";
+
+
+    books[1].ID= 2;
+    books[1].title = "book2";
+    books[1].auther = "ahmed2";
+
+
+
+	int last_place= 2;
+
+	while(last_place != 5) {
+		int option = manage_lib();
+		if(option == 1) {
+			books[last_place].set_item();
+			last_place+=1;
+		}
+		else if (option == 2) {
+			int id;
+			cout<< "ENTER ID: ";
+			cin>> id;
+			Book *ptr = search_for_book(books, last_place, id);
+			if (ptr != nullptr) {
+				ptr->update_book();
+				ptr->get_item();
+			}
+
+		}
+		else if(option ==3){
+		    int tmp = 0;
+		    while(tmp != last_place){
+		        books[tmp].get_item();
+		        tmp++;
+		    }
+		}
+		else if (option == 4){
+		    long long id ;
+		    cout<< "ENTER ID: ";
+		    cin>> id;
+		    Book *new_books =delete_book(books, last_place, id);
+		    if(new_books != nullptr){
+		        books = new_books;
+		        last_place--;
+		    }
+
+		}
+		else if (option == 5){
+		    long long id;
+
+		    cout<< "ENTER ID: ";
+		    cin>> id;
+
+
+
+		    Book *ptr = search_for_book(books, last_place, id);
+		    ptr->borrow();
+
+		}
+		else if (option == 6){
+		    long long id;
+
+		    cout<< "ENTER ID: ";
+		    cin>> id;
+
+		    Book *ptr = search_for_book(books, last_place, id);
+		    ptr->return_book();
+
+		}
+		else if(option == 0) {
+			break;
+		}
+	}
+
+
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
